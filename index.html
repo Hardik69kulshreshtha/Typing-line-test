@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header {
+            background-color: #35495e;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        #text-to-type {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+        #typing-input {
+            font-size: 1.2em;
+            padding: 10px;
+            width: 80%;
+            margin: 0 auto;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #result {
+            margin-top: 10px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Check how fast you can type !!!</h1>
+    </header>
+
+    <div class="container">
+        <p id="text-to-type">Type the text with no error:-</p>
+        <p id="text"></p>
+        
+        <input type="text" id="typing-input" placeholder="Start typing...">
+        <p id="result"></p>
+        <p id="wpm"></p>
+    </div>
+
+    <script>
+        const texts = [
+            "The quick brown fox jumps over the lazy dog.",
+            "Sphinx of black quartz, judge my vow.",
+            "Pack my box with five dozen liquor jugs.",
+            "Mr. Jock, TV quiz PhD, bags few lynx.",
+            "Crazy Frederick bought many very exquisite opal jewels."
+            // Add more sentences as needed
+        ];
+
+        const textToType = document.getElementById('text');
+        const typingInput = document.getElementById('typing-input');
+        const result = document.getElementById('result');
+        const wpmDisplay = document.getElementById('wpm');
+
+        let startTime, endTime;
+
+        function getRandomText() {
+            const randomIndex = Math.floor(Math.random() * texts.length);
+            return texts[randomIndex];
+        }
+
+        function startNewTest() {
+            const newText = getRandomText();
+            textToType.textContent = newText;
+            typingInput.value = '';
+            result.textContent = '';
+            wpmDisplay.textContent = '';
+            startTime = null;
+            endTime = null;
+        }
+
+        typingInput.addEventListener('input', () => {
+            const typedText = typingInput.value;
+            
+            if (!startTime) {
+                startTime = new Date();
+            }
+
+            if (textToType.textContent.startsWith(typedText)) {
+                result.textContent = 'Keep going...';
+                result.style.color = 'green';
+            } else {
+                result.textContent = 'Oops, incorrect!';
+                result.style.color = 'red';
+            }
+            if (typedText === textToType.textContent) {
+                result.textContent = 'Congratulations! You typed it correctly.';
+                result.style.color = 'blue';
+
+                endTime = new Date();
+                const timeTakenInSeconds = (endTime - startTime) / 1000;
+                const wordsTyped = typedText.trim().split(' ').length;
+                const wpm = Math.round((wordsTyped / timeTakenInSeconds) * 60);
+
+                wpmDisplay.textContent = `Your WPM: ${wpm}`;
+                startNewTest();
+            }
+        });
+
+        // Initialize with the first test
+        startNewTest();
+    </script>
+</body>
+</html>
+
